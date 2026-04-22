@@ -14,7 +14,7 @@
 
         /* --- 封面 --- */
         .cover-page { text-align: center; padding: 180px 40px 40px; height: 100vh; box-sizing: border-box; display: flex; flex-direction: column; }
-        .cover-page h1 { font-size: 5rem; letter-spacing: 15px; margin: 0; font-weight: 200; animation: fadeIn 1.2s ease; }
+        .cover-page h1 { font-size: 5rem; letter-spacing: 15px; margin: 0; font-weight: 200; }
         .btn-start { margin-top: 60px; background: #000; color: #fff; border: none; padding: 18px 60px; letter-spacing: 5px; cursor: pointer; font-size: 0.9rem; font-weight: bold; }
         .footer-tag { margin-top: auto; font-size: 0.7rem; color: #ddd; letter-spacing: 5px; text-transform: uppercase; padding-bottom: 40px; text-align: center; }
 
@@ -31,7 +31,6 @@
         .res-header { text-align: center; margin-bottom: 25px; border-bottom: 2px solid #000; padding-bottom: 20px;}
         .res-header h2 { font-size: 2.6rem; margin: 0; letter-spacing: 10px; font-weight: 700; }
         
-        /* 头像与一句话总结 */
         .avatar-section { text-align: center; margin-bottom: 30px; }
         .res-avatar { width: 200px; height: 200px; object-fit: contain; margin-bottom: 15px; }
         .res-tagline { font-size: 1rem; color: #333; font-weight: bold; letter-spacing: 1px; border-left: 3px solid #000; padding-left: 10px; display: inline-block; }
@@ -47,14 +46,14 @@
         .dark-index-val { font-size: 1.8rem; font-weight: bold; color: var(--accent); }
         .rarity-tag { font-size: 0.6rem; color: #fff; background: #000; padding: 2px 6px; margin-top: 5px; display: inline-block; }
 
-        .dynamic-card { background: #fcfcfc; border: 1px solid #eee; padding: 15px; text-align: left; margin-top: 10px; }
-        .dynamic-desc { font-size: 0.75rem; color: #999; line-height: 1.3; margin-top: 3px; }
+        /* 修复后的职场关系样式 */
+        .dynamic-card { background: #fcfcfc; border: 1px solid #eee; padding: 18px; text-align: left; margin-bottom: 12px; }
+        .dynamic-card span { font-size: 0.65rem; color: #bbb; display: block; margin-bottom: 6px; letter-spacing: 1px; text-transform: uppercase;}
+        .dynamic-card b { font-size: 1.1rem; color: #000; display: inline-block; margin-right: 5px;}
+        .dynamic-desc { font-size: 0.8rem; color: #999; line-height: 1.4; margin-top: 4px; display: block;}
 
         #preview-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; display: none; flex-direction: column; align-items: center; justify-content: center; }
         #preview-image { width: 85%; max-height: 80%; object-fit: contain; border: 4px solid #fff; }
-        .preview-tip { color: #fff; margin-top: 20px; font-weight: bold; }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -106,9 +105,28 @@
             </div>
 
             <div class="res-section">
+                <div class="res-label">红与黑 / PROS & CONS</div>
+                <p class="res-text"><b>关键优势 // </b><span id="res-pros"></span></p>
+                <p class="res-text" style="margin-top:10px"><b>潜在局限 // </b><span id="res-cons"></span></p>
+            </div>
+
+            <div class="res-section">
+                <div class="res-label">历史镜像 / ARCHETYPE</div>
+                <p class="res-text" style="font-style:italic;" id="res-history"></p>
+            </div>
+
+            <div class="res-section">
                 <div class="res-label">职场关系 / DYNAMICS</div>
-                <div class="dynamic-card"><span>完美合伙人</span><b id="res-p-name"></b><div class="dynamic-desc" id="res-p-desc"></div></div>
-                <div class="dynamic-card"><span>职场天敌</span><b id="res-e-name"></b><div class="dynamic-desc" id="res-e-desc"></div></div>
+                <div class="dynamic-card">
+                    <span>完美合伙人</span>
+                    <b id="res-p-name"></b>
+                    <span class="dynamic-desc" id="res-p-desc"></span>
+                </div>
+                <div class="dynamic-card">
+                    <span>职场天敌</span>
+                    <b id="res-e-name"></b>
+                    <span class="dynamic-desc" id="res-e-desc"></span>
+                </div>
             </div>
             <p style="text-align:center; font-size:0.5rem; color:#eee; letter-spacing:4px; margin-top:30px;">YY ARCHIVE // DPTI-REPORT</p>
         </div>
@@ -121,22 +139,22 @@
     </div>
 </div>
 
-<div id="preview-overlay" onclick="closePreview()">
+<div id="preview-overlay" onclick="this.style.display='none'">
     <img id="preview-image" src="">
-    <p class="preview-tip">↑ 长按图片保存并分享</p>
+    <p style="color:#fff; margin-top:20px; font-weight:bold;">↑ 长按图片保存并分享</p>
 </div>
 
 <script>
     const DPTI_DB = {
-        "01": { name: "黑天鹅", ename: "BLACK SWAN", dIndex: "95%", img: "assets/swan.png", tagline: "优雅的刽子手，资源垄断的大师。", labels: "#职场致命优雅 #顶级捕食者 #规则垄断者", core: "职场不过是你的私人后花园，而众生皆是肥料。你不参与博弈，你就是博弈本身。你擅长用最得体的微笑完成最冷酷的资源垄断，在你的优雅之下，埋着所有阻路者的白骨。", pros: "降维打击的审美力；致命的社交手腕。", cons: "视他人为棋子的权力傲慢；极度排斥真实的情感连接。", pName: "幕后推手", pDesc: "一个出谋划策，一个执行猎杀", eName: "野心家", eDesc: "两虎相争，必有一死", chart: [98, 95, 20, 90, 92] },
-        "02": { name: "剔骨刀", ename: "THE SHARPENER", dIndex: "88%", img: "assets/sharpener.png", tagline: "绝对理性的屠夫，效率的终极信徒。", labels: "#感性绝缘体 #效率断头台 #逻辑怪兽", core: "你没有心，只有算法。你是那个在裁员名单上签字时，连心跳都不会加速 1 下的冷血精密仪器。对你而言，人只是可以被替换的耗材，任何感性的噪音都是对效率的亵渎。", pros: "极致的去冗余大师；零差错的执行机器。", cons: "由于过度理性导致的社交盲区；容易在系统动荡中被第一个祭旗。", pName: "计算器", pDesc: "两个莫得感情的齿轮完美啮合", eName: "调停人", eDesc: "最烦这种和稀泥的感性废物", chart: [85, 30, 5, 98, 70] },
-        "03": { name: "独行侠", ename: "THE MAVERICK", dIndex: "92%", img: "assets/maverick.png", tagline: "体制的叛徒，秩序的天然克星。", labels: "#体制叛徒 #规则焚烧炉 #天才疯子", core: "你是老板午夜梦回时的冷汗，是秩序的天然天敌。你不需要认同，因为你降临职场的唯一目的就是烧掉那些陈旧的规则。你不是在工作，你是在进行一场毁灭式的个人表演。", pros: "从 0 到 1 的颠覆性视角；不被驯服的人格魅力。", cons: "协作性为零；极度不稳定，随时可能自爆并带走整个团队。", pName: "变色龙", pDesc: "只有变色龙能忍受并包装你的疯狂", eName: "护城河", eDesc: "守旧派与造反派的宿命之战", chart: [90, 88, 15, 80, 95] },
-        "04": { name: "幕后推手", ename: "THE ARCHITECT", dIndex: "98%", img: "assets/architect.png", tagline: "阴影中的执棋者，信息的主宰。", labels: "#阴影执棋人 #信息垄断商 #无声狩猎", core: "你不需要站在光里，但光照向哪里由你决定。你深谙借刀杀人之术，擅长通过制度设计和信息差，在对手意识到败局之前，就已经编织好了他们的结局。", pros: "上帝视角的全局掌控；极深的城府与耐心。", cons: "极度多疑导致的心理负担；容易在阴谋中迷失真实自我。", pName: "黑天鹅", pDesc: "强强联手的权力巅峰", eName: "独行侠", eDesc: "你最怕这种不按常理出牌的疯子", chart: [95, 60, 10, 92, 98] },
-        "05": { name: "野心家", ename: "THE PREDATOR", dIndex: "85%", img: "assets/predator.png", tagline: "欲望的推土机，纯粹的扩张主义者。", labels: "#扩张主义者 #职场推土机 #欲望捕食者", core: "你的呼吸里都带着扩张的饥渴。在你的逻辑里，职场就是一个巨大的猎场。你从不掩饰对权力的贪婪，你是那种会踩着同僚肩膀、甚至老板头顶往上爬的人，且从不回头。", pros: "压倒性的推进力；对机会有着野兽般的嗅觉。", cons: "吃相太难看；容易在登顶前被众人合力推下神坛。", pName: "计算器", pDesc: "帮你核算掠夺的成本与收益", eName: "黑天鹅", eDesc: "你玩的是力量，她玩的是境界", chart: [88, 98, 25, 85, 80] },
-        "06": { name: "计算器", ename: "THE QUANT", dIndex: "70%", img: "assets/quant.png", tagline: "绝对理性的投机者，莫得感情的刻度尺。", labels: "#绝对理性坐标 #职场灭火器 #莫得感情的刻度尺", core: "你是职场中最稳定的理性坐标，也是最乏味的灵魂。在你眼中，世界是由概率组成的，没有所谓的偶然。你通过极度的冷静来中和环境波动，本质上是拒绝承担风险的投机者。", pros: "零错率的精准捕捉；在混乱中维持逻辑闭环。", cons: "由于缺乏感性直觉导致错失非标机会；容易在需要感性号召力的时刻显得极其木讷。", pName: "剔骨刀", pDesc: "效率至上的共鸣", eName: "变色龙", eDesc: "你最看不起这种没有立场的软骨头", chart: [70, 20, 10, 95, 88] },
-        "07": { name: "护城河", ename: "THE FORTRESS", dIndex: "45%", img: "assets/fortress.png", tagline: "守序的平庸者，进化的阻碍。", labels: "#守序平庸者 #最后一道防线 #制度的陪葬品", core: "你是守序阵营的定海神针。不论环境如何动荡，只要你在，基本盘就不会崩。但这也是你最阴暗的地方：你通过维护旧秩序来获得安全感，甚至不惜扼杀所有创新的火苗。你是系统的保镖，也是进化的阻碍。", pros: "极高的防御带宽与耐受力；团队最稀缺的稳定性。", cons: "由于拒绝改变导致的动态迟钝；容易在组织转型期被当成旧时代的残党清除。", pName: "调停人", pDesc: "共同维持表面的和平", eName: "独行侠", eDesc: "你的一生都在试图防御他的破坏", chart: [30, 15, 60, 50, 95] },
-        "08": { name: "变色龙", ename: "THE PRISM", dIndex: "90%", img: "assets/prism.png", tagline: "没有形状的共情怪物，完美的潜伏者。", labels: "#社交伪装大师 #共情怪物 #没有形状的人", core: "你是社交伪装的大师，没有固定的形状。你能根据任何环境色调整频率，让所有人感到舒适。你的可怕之处在于：当所有人都以为你是知己时，其实你只是在镜像他们的欲望，并以此攫取你想要的资源。", pros: "完美的生存智慧与适应力；极强的环境共情调节。", cons: "长期自我异化导致的情感空虚；在需要坚定站队的时刻容易死于摇摆不定。", pName: "独行侠", pDesc: "你可以把他包装成天才，他负责产出，你负责社交", eName: "计算器", eDesc: "他一眼就能看穿你伪装下的数据漏洞", chart: [75, 92, 85, 60, 30] },
-        "09": { name: "调停人", ename: "THE MEDIATOR", dIndex: "82%", img: "assets/mediator.png", tagline: "灰色的利益掮客，伪善的和事佬。", labels: "#利益置换商 #伪善的和事佬 #灰色的桥梁", core: "你相信没有化解不了的冲突，只有还没谈拢的利益。你擅长在对立双方之间牵线搭桥，但你其实并不关心正义，你只关心“最大公约数”。你是那个能在战场中心卖水给交战双方的人，用伪善换取长袖舞。", pros: "资源整合的终极润滑剂；在死局中寻找平衡。", cons: "为了短期和平牺牲长期利益；容易在冲突升级后成为双方共同的泄愤对象。", pName: "护城河", pDesc: "一个守规矩，一个谈利益", eName: "剔骨刀", eDesc: "你的平衡在他逻辑里就是低效的垃圾", chart: [60, 80, 75, 55, 60] }
+        "01": { name: "黑天鹅", ename: "BLACK SWAN", dIndex: "95%", img: "assets/swan.png", tagline: "优雅的刽子手，资源垄断的大师。", labels: "#职场致命优雅 #顶级捕食者 #规则垄断者", core: "职场不过是你的私人后花园，而众生皆是肥料。你不参与博弈，你就是博弈本身。你擅长用最得体的微笑完成最冷酷的资源垄断，在你的优雅之下，埋着所有阻路者的白骨。", pros: "降维打击的审美力；致命的社交手腕。", cons: "视他人为棋子的权力傲慢；极度排斥真实的情感连接。", history: "克利奥帕特拉、邓文迪。", pName: "幕后推手", pDesc: "一个出谋划策，一个执行猎杀", eName: "野心家", eDesc: "两虎相争，必有一死", chart: [98, 95, 20, 90, 92] },
+        "02": { name: "剔骨刀", ename: "THE SHARPENER", dIndex: "88%", img: "assets/sharpener.png", tagline: "绝对理性的屠夫，效率的终极信徒。", labels: "#感性绝缘体 #效率断头台 #逻辑怪兽", core: "你没有心，只有算法。你是那个在裁员名单上签字时，连心跳都不会加速 1 下的冷血精密仪器。对你而言，人只是可以被替换的耗材，任何感性的噪音都是对效率的亵渎。", pros: "极致的去冗余大师；零差错的执行机器。", cons: "由于过度理性导致的社交盲区；容易在系统动荡中被第一个祭旗。", history: "埃隆·马斯克、福尔摩斯。", pName: "计算器", pDesc: "两个莫得感情的齿轮完美啮合", eName: "调停人", eDesc: "最烦这种和稀泥的感性废物", chart: [85, 30, 5, 98, 70] },
+        "03": { name: "独行侠", ename: "THE MAVERICK", dIndex: "92%", img: "assets/maverick.png", tagline: "体制的叛徒，秩序的天然克星。", labels: "#体制叛徒 #规则焚烧炉 #天才疯子", core: "你是老板午夜梦回时的冷汗，是秩序的天然天敌。你不需要认同，因为你降临职场的唯一目的就是烧掉那些陈旧的规则。你不是在工作，你是在进行一场毁灭式的个人表演。", pros: "从 0 到 1 的颠覆性视角；不被驯服的人格魅力。", cons: "协作性为零；极度不稳定，随时可能自爆并带走整个团队。", history: "史蒂夫·乔布斯、香奈儿。", pName: "变色龙", pDesc: "只有变色龙能忍受并包装你的疯狂", eName: "护城河", eDesc: "守旧派与造反派的宿命之战", chart: [90, 88, 15, 80, 95] },
+        "04": { name: "幕后推手", ename: "THE ARCHITECT", dIndex: "98%", img: "assets/architect.png", tagline: "阴影中的执棋者，信息的主宰。", labels: "#阴影执棋人 #信息垄断商 #无声狩猎", core: "你不需要站在光里，但光照向哪里由你决定。你深谙借刀杀人之术，擅长通过制度设计和信息差，在对手意识到败局之前，就已经编织好了他们的结局。", pros: "上帝视角的全局掌控；极深的城府与耐心。", cons: "极度多疑导致的心理负担；容易在阴谋中迷失真实自我。", history: "黎塞留、司马懿。", pName: "黑天鹅", pDesc: "强强联手的权力巅峰", eName: "独行侠", eDesc: "你最怕这种不按常理出牌的疯子", chart: [95, 60, 10, 92, 98] },
+        "05": { name: "野心家", ename: "THE PREDATOR", dIndex: "85%", img: "assets/predator.png", tagline: "欲望的推土机，纯粹的扩张主义者。", labels: "#扩张主义者 #职场推土机 #欲望捕食者", core: "你的呼吸里都带着扩张的饥渴。在你的逻辑里，职场就是一个巨大的猎场。你从不掩饰对权力的贪婪，你是那种会踩着同僚肩膀、甚至老板头顶往上爬的人，且从不回头。", pros: "压倒性的推进力；对机会有着野兽般的嗅觉。", cons: "吃相太难看；容易在登顶前被众人合力推下神坛。", history: "拿破仑、希拉里。", pName: "计算器", pDesc: "帮你核算掠夺的成本与收益", eName: "黑天鹅", eDesc: "你玩的是力量，她玩的是境界", chart: [88, 98, 25, 85, 80] },
+        "06": { name: "计算器", ename: "THE QUANT", dIndex: "70%", img: "assets/quant.png", tagline: "绝对理性的投机者，莫得感情的刻度尺。", labels: "#绝对理性坐标 #职场灭火器 #莫得感情的刻度尺", core: "你是职场中最稳定的理性坐标，也是最乏味的灵魂。在你眼中，世界是由概率组成的，没有所谓的偶然。你通过极度的冷静来中和环境波动，本质上是拒绝承担风险的投机者。", pros: "零错率的精准捕捉；在混乱中维持逻辑闭环。", cons: "由于缺乏感性直觉导致错失非标机会；容易在需要感性号召力的时刻显得极其木讷。", history: "艾伦·图灵、巴菲特。", pName: "剔骨刀", pDesc: "效率至上的共鸣", eName: "变色龙", eDesc: "你最看不起这种没有立场的软骨头", chart: [70, 20, 10, 95, 88] },
+        "07": { name: "护城河", ename: "THE FORTRESS", dIndex: "45%", img: "assets/fortress.png", tagline: "守序的平庸者，进化的阻碍。", labels: "#守序平庸者 #最后一道防线 #制度的陪葬品", core: "你是守序阵营的定海神针。不论环境如何动荡，只要你在，基本盘就不会崩。但这也是你最阴暗的地方：你通过维护旧秩序来获得安全感，甚至不惜扼杀所有创新的火苗。你是系统的保镖，也是进化的阻碍。", pros: "极高的防御带宽与耐受力；团队最稀缺的稳定性。", cons: "由于拒绝改变导致的动态迟钝；容易在组织转型期被当成旧时代的残党清除。", history: "默克尔、玛丽·巴拉。", pName: "调停人", pDesc: "共同维持表面的和平", eName: "独行侠", eDesc: "你的一生都在试图防御他的破坏", chart: [30, 15, 60, 50, 95] },
+        "08": { name: "变色龙", ename: "THE PRISM", dIndex: "90%", img: "assets/prism.png", tagline: "没有形状的共情怪物，完美的潜伏者。", labels: "#社交伪装大师 #共情怪物 #没有形状的人", core: "你是社交伪装的大师，没有固定的形状。你能根据任何环境色调整频率，让所有人感到舒适。你的可怕之处在于：当所有人都以为你是知己时，其实你只是在镜像他们的欲望，并以此攫取你想要的资源。", pros: "完美的生存智慧与适应力；极强的环境共情调节。", cons: "长期自我异化导致的情感空虚；在需要坚定站队的时刻容易死于摇摆不定。", history: "摩纳哥王妃格蕾丝、塔列朗。", pName: "独行侠", pDesc: "你可以把他包装成天才，他负责产出，你负责社交", eName: "计算器", eDesc: "他一眼就能看穿你伪装下的数据漏洞", chart: [75, 92, 85, 60, 30] },
+        "09": { name: "调停人", ename: "THE MEDIATOR", dIndex: "82%", img: "assets/mediator.png", tagline: "灰色的利益掮客，伪善的和事佬。", labels: "#利益置换商 #伪善的和事佬 #灰色的桥梁", core: "你相信没有化解不了的冲突，只有还没谈拢的利益。你擅长在对立双方之间牵线搭桥，但你其实并不关心正义，你只关心“最大公约数”。你是那个能在战场中心卖水给交战双方的人，用伪善换取长袖舞。", pros: "资源整合的终极润滑剂；在死局中寻找平衡。", cons: "为了短期和平牺牲长期利益；容易在冲突升级后成为双方共同的泄愤对象。", history: "基辛格、奥普拉。", pName: "护城河", pDesc: "一个守规矩，一个谈利益", eName: "剔骨刀", eDesc: "你的平衡在他逻辑里就是低效的垃圾", chart: [60, 80, 75, 55, 60] }
     };
 
     const quizData = [
@@ -241,12 +259,14 @@
         document.getElementById('res-tagline').innerText = d.tagline;
         document.getElementById('res-core').innerText = d.core;
         document.getElementById('res-labels').innerText = d.labels;
+        document.getElementById('res-pros').innerText = d.pros;
+        document.getElementById('res-cons').innerText = d.cons;
+        document.getElementById('res-history').innerText = d.history;
         document.getElementById('res-p-name').innerText = d.pName;
         document.getElementById('res-p-desc').innerText = d.pDesc;
         document.getElementById('res-e-name').innerText = d.eName;
         document.getElementById('res-e-desc').innerText = d.eDesc;
 
-        // 计算稀有度 (基于心智绝对值)
         const rarity = (Math.random() * 2 + (10 / (Math.abs(心智) + 1))).toFixed(1);
         document.getElementById('res-rarity').innerText = `稀有度 ${rarity}%`;
 
@@ -290,7 +310,6 @@
             });
         }, 500);
     }
-    function closePreview() { document.getElementById('preview-overlay').style.display = 'none'; }
 </script>
 </body>
 </html>

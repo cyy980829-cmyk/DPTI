@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QM7N4ZZV4R"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-QM7N4ZZV4R');
+    </script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DPTI | 职场第二人格索引</title>
@@ -14,7 +22,8 @@
 
         /* --- 封面 --- */
         .cover-page { text-align: center; padding: 180px 40px 40px; height: 100vh; box-sizing: border-box; display: flex; flex-direction: column; }
-        .cover-page h1 { font-size: 5rem; letter-spacing: 15px; margin: 0; font-weight: 200; }
+        .cover-page h1 { font-size: 5rem; letter-spacing: 15px; margin: 0; font-weight: 200; animation: fadeIn 1s ease; }
+        .cover-page h2 { font-size: 1.1rem; font-weight: 400; margin: 25px 0; letter-spacing: 2px; }
         .btn-start { margin-top: 60px; background: #000; color: #fff; border: none; padding: 18px 60px; letter-spacing: 5px; cursor: pointer; font-size: 0.9rem; font-weight: bold; }
         .footer-tag { margin-top: auto; font-size: 0.7rem; color: #ddd; letter-spacing: 5px; text-transform: uppercase; padding-bottom: 40px; text-align: center; }
 
@@ -46,14 +55,16 @@
         .dark-index-val { font-size: 1.8rem; font-weight: bold; color: var(--accent); }
         .rarity-tag { font-size: 0.6rem; color: #fff; background: #000; padding: 2px 6px; margin-top: 5px; display: inline-block; }
 
-        /* 修复后的职场关系样式 */
         .dynamic-card { background: #fcfcfc; border: 1px solid #eee; padding: 18px; text-align: left; margin-bottom: 12px; }
-        .dynamic-card span { font-size: 0.65rem; color: #bbb; display: block; margin-bottom: 6px; letter-spacing: 1px; text-transform: uppercase;}
+        .dynamic-card span { font-size: 0.65rem; color: #bbb; display: block; margin-bottom: 6px; letter-spacing: 1px;}
         .dynamic-card b { font-size: 1.1rem; color: #000; display: inline-block; margin-right: 5px;}
         .dynamic-desc { font-size: 0.8rem; color: #999; line-height: 1.4; margin-top: 4px; display: block;}
 
         #preview-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; display: none; flex-direction: column; align-items: center; justify-content: center; }
         #preview-image { width: 85%; max-height: 80%; object-fit: contain; border: 4px solid #fff; }
+        .preview-tip { color: #fff; margin-top: 20px; font-weight: bold; font-size: 0.9rem; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -81,13 +92,11 @@
                 <h2 id="res-name"></h2>
                 <p id="res-ename" style="letter-spacing:4px; color:#666; font-size:0.8rem;"></p>
             </div>
-            
             <div class="avatar-section">
                 <img id="res-avatar-img" class="res-avatar" src="" crossorigin="anonymous">
                 <br>
                 <div class="res-tagline" id="res-tagline"></div>
             </div>
-
             <div class="res-section">
                 <div class="res-label">阴暗维度 / DIMENSIONS</div>
                 <div class="dark-index-box">
@@ -97,51 +106,38 @@
                 </div>
                 <div class="chart-box"><canvas id="myChart"></canvas></div>
             </div>
-
             <div class="res-section">
                 <div class="res-label">毒舌侧写 / PROFILING</div>
                 <span class="res-labels" id="res-labels"></span>
                 <p class="res-text" id="res-core"></p>
             </div>
-
             <div class="res-section">
                 <div class="res-label">红与黑 / PROS & CONS</div>
                 <p class="res-text"><b>关键优势 // </b><span id="res-pros"></span></p>
                 <p class="res-text" style="margin-top:10px"><b>潜在局限 // </b><span id="res-cons"></span></p>
             </div>
-
             <div class="res-section">
                 <div class="res-label">历史镜像 / ARCHETYPE</div>
                 <p class="res-text" style="font-style:italic;" id="res-history"></p>
             </div>
-
             <div class="res-section">
                 <div class="res-label">职场关系 / DYNAMICS</div>
-                <div class="dynamic-card">
-                    <span>完美合伙人</span>
-                    <b id="res-p-name"></b>
-                    <span class="dynamic-desc" id="res-p-desc"></span>
-                </div>
-                <div class="dynamic-card">
-                    <span>职场天敌</span>
-                    <b id="res-e-name"></b>
-                    <span class="dynamic-desc" id="res-e-desc"></span>
-                </div>
+                <div class="dynamic-card"><span>完美合伙人</span><b id="res-p-name"></b><span class="dynamic-desc" id="res-p-desc"></span></div>
+                <div class="dynamic-card"><span>职场天敌</span><b id="res-e-name"></b><span class="dynamic-desc" id="res-e-desc"></span></div>
             </div>
             <p style="text-align:center; font-size:0.5rem; color:#eee; letter-spacing:4px; margin-top:30px;">YY ARCHIVE // DPTI-REPORT</p>
         </div>
-        
         <div style="padding: 20px 40px 80px; text-align:center;">
             <button class="btn-start" style="width:100%" onclick="saveReport()">生成报告长图</button>
-            <p style="font-size:0.7rem; color:#ccc; margin-top:15px;" onclick="location.reload()">重新开启档案推演</p>
+            <p style="font-size:0.7rem; color:#ccc; margin-top:15px; cursor:pointer;" onclick="location.reload()">重新开启档案推演</p>
             <div class="footer-tag" style="margin-top:40px;">YY ARCHIVE</div>
         </div>
     </div>
 </div>
 
-<div id="preview-overlay" onclick="this.style.display='none'">
+<div id="preview-overlay" onclick="closePreview()">
     <img id="preview-image" src="">
-    <p style="color:#fff; margin-top:20px; font-weight:bold;">↑ 长按图片保存并分享</p>
+    <p class="preview-tip">↑ 长按图片保存并分享</p>
 </div>
 
 <script>
@@ -165,7 +161,7 @@
             { t: "坐在饮水机旁的角落，试图把自己缩成一个隐形人，冷眼看这出闹剧如何收场。", l: "D", w: {心智:-1, 能量:-3, 规则:2} }
         ]},
         { tag: "道德与标价", q: "你握有能让“霸凌”你的上司直接下台的致命死穴，但如果你用了它，你也会因为违反合规流程而搭上全年的年终奖。你会？", options: [
-            { t: "精准猎杀：钱可以再赚，但看着他在你面前彻底毁灭，那种快感千金不换。", l: "A", w: {心智:-2, 能量:3, 规则:-2} },
+            { t: "精准猎杀：钱可以再赚，但看着他在你面前彻底毁灭，这种快感千金不换。", l: "A", w: {心智:-2, 能量:3, 规则:-2} },
             { t: "以此为盾：把它变成长期的威胁筹码，让他从此成为你升职加薪的垫脚石。", l: "B", w: {心智:3, 能量:1, 规则:2} },
             { t: "忍辱重负：年终奖比尊严更值钱。只要钱到位，你甚至可以再给敬杯酒。", l: "C", w: {心智:2, 能量:-2, 规则:1} },
             { t: "鱼死网破：把证据匿名群发给全公司，然后在这一片狼藉中优雅地递交辞职信。", l: "D", w: {心智:-1, 能量:3, 规则:-3} }
@@ -219,6 +215,7 @@
     let radarChart = null;
 
     function startTest() {
+        if(typeof gtag === 'function'){ gtag('event', 'start_quiz', {'event_category': 'Engagement'}); }
         document.getElementById('page-cover').classList.add('hidden');
         document.getElementById('page-quiz').classList.remove('hidden');
         renderQuiz();
@@ -226,6 +223,7 @@
 
     function renderQuiz() {
         const item = quizData[currentStep];
+        document.getElementById('progress-num').innerText = (currentStep + 1).toString().padStart(2, '0');
         document.getElementById('question-text').innerText = item.q;
         const box = document.getElementById('options-box');
         box.innerHTML = "";
@@ -267,7 +265,7 @@
         document.getElementById('res-e-name').innerText = d.eName;
         document.getElementById('res-e-desc').innerText = d.eDesc;
 
-        const rarity = (Math.random() * 2 + (10 / (Math.abs(心智) + 1))).toFixed(1);
+        const rarity = (Math.random() * 1.5 + (8 / (Math.abs(心智) + 1))).toFixed(1);
         document.getElementById('res-rarity').innerText = `稀有度 ${rarity}%`;
 
         document.getElementById('page-quiz').classList.add('hidden');
@@ -300,6 +298,7 @@
     }
 
     function saveReport() {
+        if(typeof gtag === 'function'){ gtag('event', 'generate_report', {'event_category': 'Engagement', 'event_label': document.getElementById('res-name').innerText}); }
         const btn = document.querySelector('.btn-start[onclick^="saveReport"]');
         btn.innerText = "正在同步档案...";
         setTimeout(() => {
@@ -310,6 +309,7 @@
             });
         }, 500);
     }
+    function closePreview() { document.getElementById('preview-overlay').style.display = 'none'; }
 </script>
 </body>
 </html>

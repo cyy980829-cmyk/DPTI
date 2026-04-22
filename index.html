@@ -20,14 +20,11 @@
         #app { width: 100%; max-width: 600px; background: var(--bg); min-height: 100vh; position: relative; display: flex; flex-direction: column;}
         .hidden { display: none !important; }
 
-        /* --- 封面 --- */
         .cover-page { text-align: center; padding: 180px 40px 40px; height: 100vh; box-sizing: border-box; display: flex; flex-direction: column; }
-        .cover-page h1 { font-size: 5rem; letter-spacing: 15px; margin: 0; font-weight: 200; animation: fadeIn 1s ease; }
-        .cover-page h2 { font-size: 1.1rem; font-weight: 400; margin: 25px 0; letter-spacing: 2px; }
+        .cover-page h1 { font-size: 5rem; letter-spacing: 15px; margin: 0; font-weight: 200; }
         .btn-start { margin-top: 60px; background: #000; color: #fff; border: none; padding: 18px 60px; letter-spacing: 5px; cursor: pointer; font-size: 0.9rem; font-weight: bold; }
         .footer-tag { margin-top: auto; font-size: 0.7rem; color: #ddd; letter-spacing: 5px; text-transform: uppercase; padding-bottom: 40px; text-align: center; }
 
-        /* --- 测试页 --- */
         .quiz-content { padding: 60px 40px; flex: 1;}
         .quiz-label { display: inline-block; background: #000; color: #fff; padding: 4px 12px; font-size: 0.75rem; margin-bottom: 35px; }
         .quiz-content h3 { font-size: 1.3rem; line-height: 1.7; margin-bottom: 45px; font-weight: 500; text-align: justify;}
@@ -35,26 +32,20 @@
         .opt-letter { font-weight: bold; color: #eee; margin-right: 20px; font-size: 1.2rem; }
         .opt-text { font-size: 0.95rem; color: #333; line-height: 1.5; }
 
-        /* --- 结果页 --- */
         .result-page { padding: 40px; background: #fff; }
         .res-header { text-align: center; margin-bottom: 25px; border-bottom: 2px solid #000; padding-bottom: 20px;}
         .res-header h2 { font-size: 2.6rem; margin: 0; letter-spacing: 10px; font-weight: 700; }
-        
         .avatar-section { text-align: center; margin-bottom: 30px; }
         .res-avatar { width: 200px; height: 200px; object-fit: contain; margin-bottom: 15px; }
         .res-tagline { font-size: 1rem; color: #333; font-weight: bold; letter-spacing: 1px; border-left: 3px solid #000; padding-left: 10px; display: inline-block; }
-
         .chart-box { width: 100%; margin: 15px 0; padding: 10px; box-sizing: border-box; background: #fafafa; }
         .res-section { margin-bottom: 40px; position: relative;}
         .res-label { background: #000; color: #fff; display: inline-block; padding: 6px 15px; font-size: 0.75rem; font-weight: bold; letter-spacing: 2px; margin-bottom: 15px;}
-        
         .res-labels { color: #999; font-size: 0.85rem; margin-bottom: 10px; font-weight: bold; display: block; }
         .res-text { font-size: 0.95rem; line-height: 1.8; color: #333; text-align: justify; white-space: pre-line; }
-        
         .dark-index-box { position: absolute; top: 0; right: 0; text-align: right; }
         .dark-index-val { font-size: 1.8rem; font-weight: bold; color: var(--accent); }
         .rarity-tag { font-size: 0.6rem; color: #fff; background: #000; padding: 2px 6px; margin-top: 5px; display: inline-block; }
-
         .dynamic-card { background: #fcfcfc; border: 1px solid #eee; padding: 18px; text-align: left; margin-bottom: 12px; }
         .dynamic-card span { font-size: 0.65rem; color: #bbb; display: block; margin-bottom: 6px; letter-spacing: 1px;}
         .dynamic-card b { font-size: 1.1rem; color: #000; display: inline-block; margin-right: 5px;}
@@ -63,8 +54,6 @@
         #preview-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; display: none; flex-direction: column; align-items: center; justify-content: center; }
         #preview-image { width: 85%; max-height: 80%; object-fit: contain; border: 4px solid #fff; }
         .preview-tip { color: #fff; margin-top: 20px; font-weight: bold; font-size: 0.9rem; }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -154,55 +143,55 @@
     };
 
     const quizData = [
-        { tag: "排位与本能", q: "周一晨会，你发现那个刚在背后捅你一刀、靠溜须拍马位的同事正坐在老板身边的“宠臣位”，全场侧目。你会？", options: [
+        { q: "周一晨会，你发现那个刚在背后捅你一刀、靠溜须拍马位的同事正坐在老板身边的“宠臣位”，全场侧目。你会？", options: [
             { t: "直接坐在他对面，用冷冽的视线对他进行全场“公开处刑”，让他感到坐立难安。", l: "A", w: {心智:2, 能量:3, 规则:0} },
             { t: "坐在会议室最深处的阴影里，在笔记本上精确勾勒出他被裁员的倒计时。", l: "B", w: {心智:3, 能量:-2, 规则:1} },
             { t: "坐在掌握实权的副总旁边，开始一场不着痕迹的越级社交，把他当成透明的空气。", l: "C", w: {心智:2, 能量:2, 规则:-1} },
             { t: "坐在饮水机旁的角落，试图把自己缩成一个隐形人，冷眼看这出闹剧如何收场。", l: "D", w: {心智:-1, 能量:-3, 规则:2} }
         ]},
-        { tag: "道德与标价", q: "你握有能让“霸凌”你的上司直接下台的致命死穴，但如果你用了它，你也会因为违反合规流程而搭上全年的年终奖。你会？", options: [
+        { q: "你握有能让“霸凌”你的上司直接下台的致命死穴，但如果你用了它，你也会因为违反合规流程而搭上全年的年终奖。你会？", options: [
             { t: "精准猎杀：钱可以再赚，但看着他在你面前彻底毁灭，这种快感千金不换。", l: "A", w: {心智:-2, 能量:3, 规则:-2} },
             { t: "以此为盾：把它变成长期的威胁筹码，让他从此成为你升职加薪的垫脚石。", l: "B", w: {心智:3, 能量:1, 规则:2} },
             { t: "忍辱重负：年终奖比尊严更值钱。只要钱到位，你甚至可以再给敬杯酒。", l: "C", w: {心智:2, 能量:-2, 规则:1} },
             { t: "鱼死网破：把证据匿名群发给全公司，然后在这一片狼藉中优雅地递交辞职信。", l: "D", w: {心智:-1, 能量:3, 规则:-3} }
         ]},
-        { tag: "假面与降智", q: "深夜 11 点，老板在群里发了一个漏洞百出的“宏图大计”并疯狂点名要你评价。此时你已筋疲力尽，你会？", options: [
+        { q: "深夜 11 点，老板在群里发了一个漏洞百出的“宏图大计”并疯狂点名要你评价。此时你已筋疲力尽，你会？", options: [
             { t: "降维赞美：用最华丽、最深奥的词汇把它捧上神坛，只有你知道那是最高级的讽刺。", l: "A", w: {心智:3, 能量:1, 规则:0} },
             { t: "职业清高：在群里保持死一般的寂静，宁愿当场离职也不想出卖大脑去迎合平庸。", l: "B", w: {心智:1, 能量:-2, 规则:-2} },
             { t: "瞬间变色：快速提取 3 个亮点进行二次包装，表现得比老板本人还兴奋。", l: "C", w: {心智:-2, 能量:2, 规则:1} },
             { t: "机械回复：只发一个“收到”，做一个拒绝交出任何灵魂能量的职场僵尸。", l: "D", w: {心智:1, 能量:-3, 规则:2} }
         ]},
-        { tag: "关系与异化", q: "你唯一的“摸鱼搭子”突然晋升成了你的直属领导。当晚她发来私聊：“我们还是好姐妹对吧？”你会？", options: [
+        { q: "你唯一的“摸鱼搭子”突然晋升成了你的直属领导。当晚她发来私聊：“我们还是好姐妹对吧？”你会？", options: [
             { t: "顺杆而上：回复“当然”，但在输入时你已经在思考如何利用这段旧情为自己攫取新权力。", l: "A", w: {心智:3, 能量:2, 规则:-1} },
             { t: "彻底切割：从此之后，她只是你向上爬的资源，或是你必须防范的假想敌。", l: "B", w: {心智:2, 能量:-2, 规则:1} },
             { t: "强烈反胃：这种背叛感让你想吐，你已经开始物色下一个比她更强的主子。", l: "C", w: {心智:-1, 能量:1, 规则:-1} },
             { t: "甚至欣慰：真心地为她高兴，并准备好在接下来的工作中为她挡掉所有的明枪暗箭。", l: "D", w: {心智:-3, 能量:-2, 规则:2} }
         ]},
-        { tag: "欲望的背叛", q: "竞争对手私下联系你，只要你能在竞标中“不小心”发错一个文件，就给你这辈子都赚不到的巨额佣金。你会？", options: [
+        { q: "竞争对手私下联系你，只要你能在竞标中“不小心”发错一个文件，就给你这辈子都赚不到的巨额佣金。你会？", options: [
             { t: "极限博弈：回复对方说这点钱不够，你想要的是对方公司的一个合伙人席位。", l: "A", w: {心智:3, 能量:2, 规则:-2} },
             { t: "职业洁癖：这种低智商的诱惑是对你顶级玩家身份的侮辱，你反手就把他举报了。", l: "B", w: {心智:2, 能量:-1, 规则:2} },
             { t: "毫无底线：忠诚只是因为背叛的筹码不够。现在筹码够了，你可以演得像个英雄。", l: "C", w: {心智:-2, 能量:3, 规则:-3} },
             { t: "胆怯的贪婪：你不敢做，但接下来的每一秒你都在为错过了这笔钱而深深懊悔。", l: "D", w: {心智:0, 能量:-2, 规则:2} }
         ]},
-        { tag: "秩序的废墟", q: "深夜在写字楼修改PPT。看着空荡荡的走廊，你想：如果这一刻整座大楼的电力逻辑由你主宰，你会？", options: [
+        { q: "深夜在写字楼修改PPT。看着空荡荡的走廊，你想：如果这一刻整座大楼的电力逻辑由你主宰，你会？", options: [
             { t: "“控制”：调暗所有人的光，让这个写字楼里的人都在你的节奏中窒息般地卷起来。", l: "A", w: {心智:-1, 能量:3, 规则:2} },
             { t: "“观测”：站在高处复盘，谁才是这满地工蚁中最适合被献祭的那个替死鬼？", l: "B", w: {心智:3, 能量:-1, 规则:0} },
             { t: "“彻底离线”：想立刻注销所有账号，用这辈子的“缺席”来嘲讽这一套吃人的体系。", l: "C", w: {心智:-3, 能量:2, 规则:-3} },
             { t: "“价值最大化”：与其感性，不如思考如何利用这种深夜加班的惨状去谈个更好的补偿包。", l: "D", w: {心智:2, 能量:-2, 规则:2} }
         ]},
-        { tag: "杀掉那个天真", q: "如果能穿越回领入职礼包的那天，亲手杀掉那个相信“努力就有回报”的自己，你会选在哪个瞬间？", options: [
+        { q: "如果能穿越回领入职礼包的那天，亲手杀掉那个相信“努力就有回报”的自己，你会选在哪个瞬间？", options: [
             { t: "她在第一次因为项目荣誉熬通宵、却被领导致谢词里抹去名字的时刻。", l: "A", w: {心智:3, 能量:-1, 规则:1} },
             { t: "她在第一次领到微薄薪水，还舍得给全组买下午茶分享快乐的时刻。", l: "B", w: {心智:-2, 能量:2, 规则:-1} },
             { t: "她在第一次天真地对 HR 说出“我热爱这份工作”的时刻。", l: "C", w: {心智:2, 能量:-2, 规则:1} },
             { t: "就在此时此刻，让她彻底消失在这一场漫长且绝望的权力推演里。", l: "D", w: {心智:1, 能量:1, 规则:-2} }
         ]},
-        { tag: "博弈的残忍", q: "项目出大祸，你明明有办法止损，但如果不止损，你最讨厌的那个竞争对手就会被当场开除。你会？", options: [
+        { q: "项目出大祸，你明明有办法止损，但如果不止损，你最讨厌的那个竞争对手就会被当场开除。你会？", options: [
             { t: "借刀杀人：假装努力止损但“功亏一翼”，微笑着目送他收拾东西滚蛋。", l: "A", w: {心智:3, 能量:1, 规则:-2} },
             { t: "绝对理性：为了全局利益救他一命，但从此让他欠下你一辈子还不起的债。", l: "B", w: {心智:2, 能量:-1, 规则:2} },
             { t: "看着他死：牺牲公司的利益去换取私仇的快感，这笔账在你心里很划算。", l: "C", w: {心智:-2, 能量:3, 规则:-3} },
             { t: "惊慌失措：因为害怕承担责任而陷入瘫痪，只能眼睁睁看着一切滑向深渊。", l: "D", w: {心智:-2, 能量:-3, 规则:2} }
         ]},
-        { tag: "权力的代价", q: "当你终于坐进独立的办公室，看着外面那些战战兢兢、为了生计向你低头的下属。你的情绪是？", options: [
+        { q: "当你终于坐进独立的办公室，看着外面那些战战兢兢、为了生计向你低头的下属。你的情绪是？", options: [
             { t: "征服的快感：这就是你牺牲了所有社交、情感和良知才换回来的战利品。", l: "A", w: {心智:-2, 能量:3, 规则:2} },
             { t: "极度的清醒：这种孤独是效率的勋章，弱者才需要所谓的“团队温情”。", l: "B", w: {心智:3, 能量:-1, 规则:1} },
             { t: "某种虚无：你虽然成了主宰者，但发现自己也不过是更高一级权力的囚徒。", l: "C", w: {心智:1, 能量:2, 规则:-2} },
@@ -215,7 +204,7 @@
     let radarChart = null;
 
     function startTest() {
-        if(typeof gtag === 'function'){ gtag('event', 'start_quiz', {'event_category': 'Engagement'}); }
+        if(typeof gtag === 'function'){ gtag('event', 'start_quiz'); }
         document.getElementById('page-cover').classList.add('hidden');
         document.getElementById('page-quiz').classList.remove('hidden');
         renderQuiz();
@@ -298,7 +287,7 @@
     }
 
     function saveReport() {
-        if(typeof gtag === 'function'){ gtag('event', 'generate_report', {'event_category': 'Engagement', 'event_label': document.getElementById('res-name').innerText}); }
+        if(typeof gtag === 'function'){ gtag('event', 'generate_report', {'result': document.getElementById('res-name').innerText}); }
         const btn = document.querySelector('.btn-start[onclick^="saveReport"]');
         btn.innerText = "正在同步档案...";
         setTimeout(() => {

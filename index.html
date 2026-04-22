@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DPTI | 职场第二人格索引</title>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <style>
+        :root { --bg: #ffffff; --main-text: #000000; --sub-text: #999999; --border: #f2f2f2; }
+        body { font-family: "PingFang SC", "STHeiti", sans-serif; background-color: #fcfcfc; margin: 0; display: flex; justify-content: center; color: var(--main-text); }
+        #app { width: 100%; max-width: 600px; background: var(--bg); min-height: 100vh; position: relative; }
+        .hidden { display: none !important; }
+
+        /* --- 封面 --- */
+        .cover-page { text-align: center; padding: 180px 40px 40px; height: 100vh; box-sizing: border-box; display: flex; flex-direction: column; }
+        .cover-page h1 { font-size: 5rem; letter-spacing: 15px; margin: 0; font-weight: 200; }
+        .cover-page h2 { font-size: 1.1rem; font-weight: 400; margin: 25px 0; letter-spacing: 4px; }
+        .btn-start { margin-top: 60px; background: #000; color: #fff; border: none; padding: 15px 60px; letter-spacing: 5px; cursor: pointer; font-size: 0.9rem; }
+        .cover-footer { margin-top: auto; font-size: 0.7rem; color: #ddd; letter-spacing: 5px; text-transform: uppercase; padding-bottom: 40px; }
+
+        /* --- 测试页 --- */
+        .quiz-header { padding: 30px 40px; border-bottom: 1px solid var(--border); font-size: 0.8rem; color: #ccc; letter-spacing: 2px; }
+        .quiz-header b { color: #000; font-size: 1rem; margin-left: 10px; }
+        .quiz-content { padding: 60px 40px; }
+        .quiz-label { display: inline-block; background: #000; color: #fff; padding: 4px 10px; font-size: 0.7rem; margin-bottom: 35px; letter-spacing: 1px; }
+        .quiz-content h3 { font-size: 1.3rem; line-height: 1.7; margin-bottom: 50px; font-weight: 500; }
+        .option-item { border: 1px solid var(--border); padding: 22px; margin-bottom: 15px; display: flex; align-items: center; cursor: pointer; transition: 0.2s; }
+        .option-item:hover { border-color: #000; background: #fafafa; }
+        .opt-letter { font-weight: bold; color: #eee; margin-right: 25px; font-size: 1.2rem; }
+        .opt-text { font-size: 0.95rem; color: #333; line-height: 1.6; }
+
+        /* --- 结果页 --- */
+        .result-page { padding: 60px 40px; background: #fff; }
+        .res-title-group { text-align: center; margin-bottom: 50px; }
+        .res-title-group h2 { font-size: 2.4rem; margin: 0; letter-spacing: 10px; font-weight: 600; }
+        .res-title-group p { font-size: 0.8rem; color: #bbb; letter-spacing: 4px; margin-top: 12px; }
+        .img-box { width: 100%; margin: 40px 0; border: 1px solid #f9f9f9; background: #fff; }
+        #res-img { width: 100%; height: auto; display: block; }
+        
+        .res-section { margin-bottom: 50px; }
+        .res-label { background: #000; color: #fff; display: inline-block; padding: 5px 15px; font-size: 0.75rem; font-weight: bold; letter-spacing: 2px; margin-bottom: 25px; }
+        .res-one-liner { font-style: italic; color: #666; font-size: 1.1rem; margin-bottom: 15px; border-left: 3px solid #000; padding-left: 15px; }
+        .res-text { font-size: 1rem; line-height: 1.9; color: #333; text-align: justify; white-space: pre-line; }
+        
+        .res-history-box { background: #f8f8f8; padding: 25px; margin-top: 10px; }
+        .dynamics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
+        .dynamic-card { background: #fff; border: 1px solid #eee; padding: 20px; text-align: center; }
+        .dynamic-card span { font-size: 0.7rem; color: #bbb; display: block; margin-bottom: 10px; }
+        .dynamic-card b { font-size: 1rem; color: #000; }
+
+        .btn-group { padding: 0 40px 80px; text-align: center; }
+        .btn-share { width: 100%; padding: 20px; background: #000; color: #fff; border: none; cursor: pointer; letter-spacing: 3px; font-weight: bold; margin-bottom: 20px; font-size: 0.9rem; }
+        .btn-restart { width: 100%; padding: 15px; background: none; border: 1px solid #eee; color: #ccc; cursor: pointer; letter-spacing: 2px; }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <div id="page-cover" class="cover-page">
+        <h1>DPTI</h1>
+        <h2>职场第二人格 | 阴暗原型索引</h2>
+        <div><button class="btn-start" onclick="startTest()">开启推演</button></div>
+        <div class="cover-footer">Y.Y. ARCHIVE</div>
+    </div>
+
+    <div id="page-quiz" class="hidden">
+        <div class="quiz-header">DPTI // PHASE <b id="progress-num">01</b> <span style="float:right">/ 09</span></div>
+        <div class="quiz-content">
+            <div class="quiz-label" id="quiz-tag">ARCHIVE LOADING</div>
+            <h3 id="question-text"></h3>
+            <div id="options-box"></div>
+        </div>
+    </div>
+
+    <div id="page-result" class="hidden">
+        <div id="capture-area" class="result-page">
+            <div class="res-title-group"><h2 id="res-name"></h2><p id="res-ename">ARCHETYPE INDEX</p></div>
+            <div class="img-box"><img id="res-img" src=""></div>
+            
+            <div class="res-section">
+                <div class="res-label">维度侧写 / PROFILING</div>
+                <div class="res-one-liner" id="res-tagline"></div>
+                <p class="res-text" id="res-core"></p>
+            </div>
+
+            <div class="res-section">
+                <div class="res-label">红与黑 / PROS & CONS</div>
+                <p class="res-text"><b style="color:#000">关键优势 // </b><span id="res-pros"></span></p>
+                <p class="res-text" style="margin-top:15px"><b style="color:#000">潜在局限 // </b><span id="res-cons"></span></p>
+            </div>
+
+            <div class="res-section">
+                <div class="res-label">历史镜像 / ARCHETYPE</div>
+                <div class="res-history-box"><p class="res-text" id="res-history"></p></div>
+            </div>
+
+            <div class="res-section">
+                <div class="res-label">职场关系 / DYNAMICS</div>
+                <div class="dynamics-grid">
+                    <div class="dynamic-card"><span>完美合伙人</span><b id="res-partner"></b></div>
+                    <div class="dynamic-card"><span>职场天敌</span><b id="res-enemy"></b></div>
+                </div>
+            </div>
+            <p style="text-align:center; font-size:0.6rem; color:#f5f5f5; letter-spacing:4px; margin-top:50px;">Y.Y. ARCHIVE // DPTI REPORT</p>
+        </div>
+        
+        <div class="btn-group">
+            <button class="btn-share" onclick="saveReport()">存取推演报告 (IMAGE)</button>
+            <button class="btn-restart" onclick="location.reload()">重新存取档案</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- 档案库配置保持不变 ---
+    const DPTI_DB = {
+        "01": { name: "黑天鹅", ename: "BLACK SWAN", img: "assets/swan.png", tagline: "“高屋建瓴的权力博弈者，在优雅中完成资源垄断。”", core: "你习惯于在职场暗流中不动声色地完成布局。不同于直接的冲撞，你更倾向于利用认知差和审美包装你的野心。你是天生的社交策略家，总能精准捕捉权力场中的微妙震动，并在无声处锁定胜局。", pros: "具备极致的社交手腕与资源整合能力；擅长利用高级审美进行降维打击。", cons: "骨子里带有深层的权力傲慢，视他人为棋子；极度厌恶并排斥情感依赖。", history: "邓文迪、克利奥帕特拉。她们在权力边缘游刃有余，将个人特质转化为最锋利的政治武器。", partner: "幕后推手", enemy: "野心家" },
+        "02": { name: "野心家", ename: "THE PREDATOR", img: "assets/predator.png", tagline: "“纯粹的扩张主义者，对目标有着野兽般的饥渴。”", core: "你拥有极强的领地意识。在你的逻辑里，职场就是一个巨大的猎场。你从不满足于现状，攀登对你而言不仅是向上的路径，更是证明生存价值的唯一方式。", pros: "具备压倒性的执行力与进攻性；能带领团队在极短时间内撕开市场缺口。", cons: "由于极度关注远方，常因缺乏耐性而忽略致命细节；带有毁灭性的支配欲。", history: "拿破仑、希拉里。他们的字典里没有撤退，只有意志的彻底贯彻。", partner: "计算器", enemy: "黑天鹅" },
+        "03": { name: "幕后推手", ename: "THE ARCHITECT", img: "assets/architect.png", tagline: "“阴影中的执棋人，用规则编织众生的结局。”", core: "你不需要站在光里，但光照向哪里由你决定。你深谙借力打力之术，擅长通过复杂的制度设计操控全局。当对手意识到败局时，你往往还身处安全区之外。", pros: "极致的全局掌控力与布局耐心；擅长用最小的物理代价换取最大的战略筹码。", cons: "性格中带有深重的多疑，难以建立真实的信任关系，无法产生真实的情感连接。", history: "黎塞留、司马懿。他们在漫长的忍耐中，成为了唯一的收割者。", partner: "黑天鹅", enemy: "独行侠" },
+        "04": { name: "剔骨刀", ename: "THE SHARPENER", img: "assets/sharpener.png", tagline: "“效率的极端信徒，精准剔除系统中一切感性噪音。”", core: "你追求逻辑的绝对纯粹，在你眼中，职场只有“有效”和“无效”。你像一把精密的解剖刀，能瞬间剥离繁文缛节，直达问题核心。", pros: "直戳本质，是去冗余的大师。具备极高的人均产出比，逻辑闭环能力强。", cons: "由于过度理性导致缺乏人情味；容易因追求效率而忽视人性中的脆弱。", history: "埃隆·马斯克、福尔摩斯。他们是纯粹的逻辑生物。", partner: "计算器", enemy: "调停人" },
+        "05": { name: "独行侠", ename: "THE MAVERICK", img: "assets/maverick.png", tagline: "“不被驯服的破局者，用毁灭式创新改写秩序。”", core: "你是游离于体制外的天才，规则对你而言只是参考。你通过提供颠覆性视角来证明自己的存在，你存在的意义就是为了否定陈旧的秩序。", pros: "具备降维打击般的创新力；能在既定死局中通过非线性思考找到生机。", cons: "属于团队协作的重度灾难；极难被管理与说服，导致协作链条断裂。", history: "史蒂夫·乔布斯、可可·香奈儿。他们从不讨好大众。", partner: "变色龙", enemy: "护城河" },
+        "06": { name: "计算器", ename: "THE QUANT", img: "assets/quant.png", tagline: "“绝对理性的观测者，从不相信运气，只相信计算。”", core: "你是职场中最稳定的理性坐标。在你眼中，世界是由概率组成的。你通过极度的冷静来中和环境的波动，是决策链条中最可靠的阀门。", pros: "具备零错率的精准度；情绪极其稳定，擅长在复杂波动中捕捉最优解。", cons: "行为模式高度机械化，缺乏感性直觉；难以理解人性中复杂微小的心理博弈。", history: "艾伦·图灵、沃伦·巴菲特。他们用算力对抗世界的混沌。", partner: "剔骨刀", enemy: "变色龙" },
+        "07": { name: "护城河", ename: "THE FORTRESS", img: "assets/fortress.png", tagline: "“系统的终极守护者，用极度的耐受力对抗变局。”", core: "你是守序阵营的定海神针。不论环境如何动荡，只要你在，基本盘就不会崩。你代表了职场中最稀缺的稳定性和忠诚度。", pros: "具备极高的防御带宽；是处理极度繁琐任务的惊人耐受力承担者。", cons: "性格固执，本能地排斥突变；在动态竞争环境下反应迟钝，阻碍转型。", history: "安格拉·默克尔、玛丽·巴拉。她们在波云诡谲中守住了秩序。", partner: "调停人", enemy: "独行侠" },
+        "08": { name: "变色龙", ename: "THE PRISM", img: "assets/prism.png", tagline: "“完美的职场共情者，环境需要你是谁，你就是谁。”", core: "你是社交伪装的大师，没有固定的形状。你能根据任何环境色调整频率，让所有人感到舒适。你在缝隙中生存并攫取资源。", pros: "具备极高的生存智慧；擅长调节共情频率，游刃有余地处理利益博弈。", cons: "缺乏核心立场，容易因长期扮演他人而自我异化；在关键时刻容易摇摆。", history: "摩纳哥王妃、塔列朗。他们是流动的艺术。", partner: "独行侠", enemy: "计算器" },
+        "09": { name: "调停人", ename: "THE MEDIATOR", img: "assets/mediator.png", tagline: "“平衡利益的天平，在冲突中寻找最大公约数。”", core: "你是资源置换大师。你相信没有化解不了的冲突，只有还没谈拢的利益。你擅长在对立双方之间牵线搭桥，让混乱回归动态秩序。", pros: "具备优秀的资源整合能力；擅长在复杂博弈中化解冲突，促成跨界合作。", cons: "优柔寡断，常因追求表面和平而牺牲长期利益；容易损耗决策权威。", history: "亨利·基辛格、奥普拉。他们是权力的润滑剂。", partner: "护城河", enemy: "剔骨刀" }
+    };
+
+    const quizData = [
+        { tag: "领地与入场", q: "你被邀请参加一个顶层闭门会议，会场里全是行业能量级比你高的人。目前只有四个位置空着，你的潜意识会指引你坐哪？", options: [{ t: "正对着主位、最受瞩目的“高光位”", l: "A", w: {心智:2, 能量:2} },{ t: "位于主位斜后方、视野极佳的“观察位”", l: "B", w: {心智:3, 能量:-2} },{ t: "靠近茶水台或出口、气氛轻松的“边缘位”", l: "C", w: {心智:-1, 能量:2} },{ t: "坐在那个看起来最落寞、或是被孤立的嘉宾旁边", l: "D", w: {心智:-2, 能量:-1} }] },
+        { tag: "信任的崩塌", q: "最信任的合作伙伴失误导致项目延期，她流泪请你隐瞒。你的真实反应是？", options: [{ t: "坚决汇报：尽全力填坑，但失误必须上报。", l: "A", w: {心智:2, 规则:-2} },{ t: "盘算利弊：把失误包装成意外，顺便向老板要资源。", l: "B", w: {心智:3, 规则:2} },{ t: "共情隐瞒：陪她熬通宵也要帮她改完。", l: "C", w: {心智:-2, 规则:-2} },{ t: "冷淡切割：已经在心里把她踢出了名单。", l: "D", w: {心智:-1, 规则:2} }] },
+        { tag: "野心的投射", q: "获得打破平衡的新技术。公布会损公司利益但让你名声大噪。你会？", options: [{ t: "严守秘密，直到找到交易时刻。", l: "A", w: {规则:-2, 能量:-2} },{ t: "借力打力：迅速寻找强硬挑战者打破规则。", l: "B", w: {规则:2, 能量:2} },{ t: "平稳过渡：在内部逐步渗透。", l: "C", w: {规则:-2, 能量:2} },{ t: "公开掀浪：享受打破禁忌的快感。", l: "D", w: {规则:2, 能量:-1} }] },
+        { tag: "情绪极简主义", q: "火药味会议后，针对你的同事发来“下班喝一杯”，你反应是？", options: [{ t: "礼貌回复“好呀”，但内心毫无波动。", l: "A", w: {能量:-2, 心智:2} },{ t: "简单回“下次吧”：没必要浪费能量。", l: "B", w: {能量:-2, 心智:3} },{ t: "欣然赴约：在酒桌上把不爽转化为资源。", l: "C", w: {能量:2, 心智:-2} },{ t: "热情回复：只要场面不尴尬。", l: "D", w: {能量:2, 心智:-2} }] },
+        { tag: "向上管理", q: "老板引用错误结论会导致项目偏移，你会？", options: [{ t: "委婉提问：现场指出是否结合数据会更好。", l: "A", w: {规则:2, 心智:-1} },{ t: "私下修正：保护老板面子是底线。", l: "B", w: {规则:-2, 心智:2} },{ t: "危机公关：策划把错圆成对的奇招。", l: "C", w: {规则:2, 心智:1} },{ t: "观察全场：绝不当那个破坏气氛的人。", l: "D", w: {规则:-2, 心智:-2} }] },
+        { tag: "职业倦怠", q: "下午三点感到巨大虚无感。此时你最想做的是？", options: [{ t: "去照镜子：确认精致的面具还完好。", l: "A", w: {能量:2, 规则:-2} },{ t: "物理隔绝：用降噪耳机彻底消失。", l: "B", w: {能量:-2, 规则:2} },{ t: "去天台找同事：确认还有同类。", l: "C", w: {能量:2, 规则:2} },{ t: "强制工作：用更高强度的逻辑去覆盖感性。", l: "D", w: {能量:-2, 规则:-2} }] },
+        { tag: "金钱与代价", q: "Offer薪资翻倍但需带走原公司商秘。你第一个念头是？", options: [{ t: "评估成本：只要风险可控，这是高赔率博弈。", l: "A", w: {心智:2, 能量:2} },{ t: "生理反感：厌恶打破专业洁癖。", l: "B", w: {心智:3, 能量:-2} },{ t: "重启生活：欲望让你心跳加速。", l: "C", w: {心智:-2, 能量:2} },{ t: "纠结恩义：拒绝很想，但担心错过机会。", l: "D", w: {心智:-2, 能量:-1} }] },
+        { tag: "顶级孤独", q: "登顶后的深夜会议结束，你看着城市灯火的情绪是？", options: [{ t: "掌控感：觉得牺牲和孤独都是值得的。", l: "A", w: {规则:2, 能量:2} },{ t: "复盘行程：这种孤独是高效的。", l: "B", w: {规则:-2, 能量:-2} },{ t: "渴望卸下：想要联系一个不懂职场的朋友。", l: "C", w: {规则:2, 能量:1} },{ t: "虚无感：发现依然在更大秩序中。", l: "D", w: {规则:-2, 能量:-2} }] },
+        { tag: "重启的假象", q: "回到入职第一天。面对青涩的自己说什么？", options: [{ t: "别投入感情，这里只认逻辑。", l: "A", w: {心智:3, 规则:-2} },{ t: "勇敢一点：后悔当初太过于求稳。", l: "B", w: {心智:2, 规则:2} },{ t: "留给自己：别让野心吞噬了灵魂。", l: "C", w: {心智:-2, 规则:-2} },{ t: "结交能量：认知关系才是第一驱动。", l: "D", w: {心智:-1, 规则:2} }] }
+    ];
+
+    let currentStep = 0;
+    let scores = { 心智: 0, 能量: 0, 规则: 0 };
+
+    function startTest() {
+        document.getElementById('page-cover').classList.add('hidden');
+        document.getElementById('page-quiz').classList.remove('hidden');
+        renderQuiz();
+    }
+
+    function renderQuiz() {
+        const item = quizData[currentStep];
+        document.getElementById('progress-num').innerText = (currentStep + 1).toString().padStart(2, '0');
+        document.getElementById('quiz-tag').innerText = item.tag;
+        document.getElementById('question-text').innerText = item.q;
+        const box = document.getElementById('options-box');
+        box.innerHTML = "";
+        item.options.forEach(opt => {
+            const div = document.createElement('div');
+            div.className = "option-item";
+            div.innerHTML = `<span class="opt-letter">${opt.l}</span><span class="opt-text">${opt.t}</span>`;
+            div.onclick = () => {
+                for(let k in opt.w) scores[k] += opt.w[k];
+                currentStep++;
+                if(currentStep < quizData.length) renderQuiz();
+                else finalize();
+            };
+            box.appendChild(div);
+        });
+    }
+
+    function finalize() {
+        const { 心智, 能量, 规则 } = scores;
+        let id = "01";
+        if (心智 >= 5) { 
+            if (能量 >= 0) id = (规则 >= 0) ? "02" : "01";
+            else id = (规则 >= 0) ? "04" : "03";
+        } else if (心智 > -5) { 
+            if (能量 >= 0) id = (规则 >= 0) ? "08" : "09";
+            else id = "06";
+        } else {
+            id = (规则 >= 0) ? "05" : "07";
+        }
+
+        const d = DPTI_DB[id];
+        document.getElementById('res-name').innerText = d.name;
+        document.getElementById('res-ename').innerText = d.ename;
+        document.getElementById('res-img').src = d.img;
+        document.getElementById('res-tagline').innerText = d.tagline;
+        document.getElementById('res-core').innerText = d.core;
+        document.getElementById('res-pros').innerText = d.pros;
+        document.getElementById('res-cons').innerText = d.cons;
+        document.getElementById('res-history').innerText = d.history;
+        document.getElementById('res-partner').innerText = d.partner;
+        document.getElementById('res-enemy').innerText = d.enemy;
+
+        document.getElementById('page-quiz').classList.add('hidden');
+        document.getElementById('page-result').classList.remove('hidden');
+        window.scrollTo(0,0);
+    }
+
+    // --- 强化版截图逻辑 ---
+    function saveReport() {
+        const area = document.getElementById('capture-area');
+        const btn = document.querySelector('.btn-share');
+        
+        // 检查是否通过 Live Server 运行
+        if (location.protocol === 'file:') {
+            alert("⚠️ 核心安全限制：\n请点击 VS Code 右下角的 'Go Live' 或右键 'Open with Live Server' 运行，否则浏览器将禁止存取推演图片。");
+            return;
+        }
+
+        btn.innerText = "正在档案存取...";
+        
+        html2canvas(area, {
+            useCORS: true, 
+            scale: 2, 
+            backgroundColor: "#ffffff",
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `DPTI_${document.getElementById('res-name').innerText}.png`;
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+            btn.innerText = "存取推演报告 (IMAGE)";
+        }).catch(err => {
+            console.error(err);
+            btn.innerText = "存取失败";
+        });
+    }
+</script>
+</body>
+</html>
